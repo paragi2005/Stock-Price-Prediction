@@ -1,0 +1,25 @@
+Problem Statement
+
+Stock market prices are highly volatile and influenced by multiple factors such as company performance, global events, investor sentiment, and market trends. Investors often struggle to make data-driven decisions about when to buy, hold, or sell stocks. Lack of accurate and timely predictions leads to financial losses and missed opportunities.
+
+Objectives
+
+Stock Price Forecasting: Build a system that predicts future stock prices based on historical data using GRU (Gated Recurrent Unit) deep learning model.
+
+Trend Analysis: Identify upward or downward trends to assist investors in making profitable decisions.
+
+Visualization: Provide a clear visual comparison of actual vs. predicted stock prices.
+
+Automation: Create a user-friendly platform that automates fetching data, training the model, and displaying results.
+
+Applications
+
+Investment Decision Support: Helps traders and investors choose the right time to buy, hold, or sell stocks.
+
+Risk Management: Reduces financial risks by providing data-backed predictions.
+
+Portfolio Optimization: Assists in diversifying investments based on predicted trends.
+
+Educational Use: Beneficial for students and researchers learning about financial forecasting and deep learning models.
+
+Business Intelligence: Useful for financial institutions, advisors, and fintech startups to integrate predictive analytics into their tools.

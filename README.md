@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Simplified Flask app using provided GRU model.
 
 To train the model locally (recommended):
@@ -15,3 +16,7 @@ To train the model locally (recommended):
 After training, run the app:
    python app.py
 Open http://localhost:5000
+=======
+# Stock-Price-Prediction
+Sem Project-III
+>>>>>>> fa529d0423b377aa66ea6ded2600c9d3cadb0464

@@ -1,14 +1,12 @@
 import os
 import pandas as pd
 import numpy as np
-import yfinance as yf
 import matplotlib.pyplot as plt
 import mplfinance as mpf
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import GRU, Dense, Dropout
 from tensorflow.keras.callbacks import EarlyStopping
-from datetime import datetime, timedelta
 
 MODEL_PATH = os.path.join(os.getcwd(), "saved_model", "gru_model.h5")
 SCALER_PATH = os.path.join(os.getcwd(), "saved_model", "scaler.npz")
@@ -16,10 +14,10 @@ CHART_PATH = os.path.join(os.getcwd(), "static", "charts")
 os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
 os.makedirs(CHART_PATH, exist_ok=True)
 
-TIME_STEPS = 30  # number of past days used for prediction
+TIME_STEPS = 30  # Number of past days used for prediction
 
 # -------------------------------------------------
-# Load and preprocess CSV data
+# Load and preprocess data
 # -------------------------------------------------
 def load_and_prepare(filepath):
     df = pd.read_csv(filepath)
@@ -56,7 +54,7 @@ def build_gru(input_shape):
     return model
 
 # -------------------------------------------------
-# Train model locally
+# Train model (optional)
 # -------------------------------------------------
 def train_model_if_needed():
     train_file = os.path.join(os.getcwd(), "uploads", "train_preprocessed.csv")
@@ -116,7 +114,7 @@ def generate_candlestick_chart(df, ticker):
     return f"/static/charts/{ticker}_candlestick.png"
 
 # -------------------------------------------------
-# Predict from CSV file
+# Predict next-day closing price
 # -------------------------------------------------
 def predict_from_file(filepath, predict_date=None):
     df, feature_cols, X, y = load_and_prepare(filepath)
@@ -140,44 +138,22 @@ def predict_from_file(filepath, predict_date=None):
     next_value = next_scaled * (y_max - y_min + 1e-9) + y_min
     next_value = float(next_value.flatten()[0])
 
-    last_close = df["Close"].iloc[-1]
-    signal = "BUY" if next_value > last_close * 1.01 else "SELL" if next_value < last_close * 0.99 else "HOLD"
-    chart_url = generate_candlestick_chart(df, os.path.splitext(os.path.basename(filepath))[0])
+    # Determine BUY/SELL/HOLD
+    last_close = df["Close"].iloc[-1] if "Close" in df.columns else next_value
+    if next_value > last_close * 1.01:
+        signal = "BUY"
+    elif next_value < last_close * 0.99:
+        signal = "SELL"
+    else:
+        signal = "HOLD"
+
+    # Candlestick chart
+    ticker_name = os.path.splitext(os.path.basename(filepath))[0]
+    chart_url = generate_candlestick_chart(df, ticker_name)
 
     return {
         "predicted_next_close": next_value,
-        "last_date": df["Date"].iloc[-1],
+        "last_date": df["Date"].iloc[-1] if "Date" in df.columns else "N/A",
         "signal": signal,
         "chart_url": chart_url
     }
-
-# -------------------------------------------------
-# ✅ Predict LIVE stock data from Yahoo Finance
-# -------------------------------------------------
-def predict_live(ticker, days=180):
-    """
-    Fetches recent live data for the given ticker from Yahoo Finance,
-    and predicts the next closing price using the trained GRU model.
-
-    Parameters:
-        ticker (str): Stock symbol, e.g., 'AAPL'
-        days (int): Number of past days to use for context (default=60)
-    """
-    end = datetime.now()
-    start = end - timedelta(days=days * 2)  # fetch extra data for safety
-
-    df = yf.download(ticker, start=start, end=end)
-
-    if df.empty:
-        raise ValueError(f"No live data found for ticker {ticker}.")
-
-    df.reset_index(inplace=True)
-    df.rename(columns={"Date": "Date"}, inplace=True)
-    df["Target_Close_T+1"] = df["Close"].shift(-1)
-    df.dropna(inplace=True)
-
-    tmp_path = os.path.join("uploads", f"{ticker}_live.csv")
-    os.makedirs("uploads", exist_ok=True)
-    df.to_csv(tmp_path, index=False)
-
-    return predict_from_file(tmp_path)

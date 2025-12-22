@@ -94,7 +94,10 @@ Live Data Fetching (yfinance) → Data Preprocessing → Feature Engineering →
   - Close  
   - Adjusted Close  
   - Volume  
-- *Stocks Used:* Selected NSE / BSE / NASDAQ listed companies  
+  - *Stocks Used:* Selected "AAPL","MSFT","TSLA","AMZN","GOOGL","META","NVDA","NFLX","AMD", "INTC","IBM","ORCL","PYPL","SHOP","JPM","BAC","WFC","C","GS","MS","V","MA",
+    "KO","PEP","MCD","NKE","SBUX","DIS","T","VZ","QCOM","AVGO","CSCO",
+    "TSM","BABA","PDD","XOM","CVX","BP","WMT","COST","HD","LOW","UNH",
+    "PFE","MRK","JNJ","ABBV","CRM","ADBE" are listed companies  
 
 ---
 
@@ -137,8 +140,7 @@ These features help capture market trends, momentum, volatility, and temporal de
 
 ### Algorithms Used  
 
-- GRU 
-- Random Forest Regressor  
+- GRU   
 
 ---
 
@@ -157,7 +159,7 @@ These features help capture market trends, momentum, volatility, and temporal de
 - Correlation analysis between engineered features.
 
 ### Module 3: Model Training and Prediction  
-- Training regression models on historical data.  
+- Training GRU models on historical data.  
 - Hyperparameter tuning for improved accuracy.  
 - Predicting stock prices using live market data.
 
@@ -167,23 +169,12 @@ These features help capture market trends, momentum, volatility, and temporal de
 *Date: 27/10/2025 to 04/11/2025*
 
 ### Results Obtained  
-- Linear Regression provided a strong baseline model.  
-- Decision Tree showed moderate accuracy with some overfitting.  
-- Random Forest Regressor achieved the best performance with minimal error.  
-- GRU is suitable.  
+The Gated Recurrent Unit (GRU) model was trained on historical stock price data to predict future closing prices. The model effectively captured temporal dependencies and trends in the time-series data.
 
-### Performance Metrics  
-- Mean Absolute Error (MAE)  
-- Mean Squared Error (MSE)  
-- Root Mean Squared Error (RMSE)  
-- R² Score  
-
-### Model Evaluation (Graphs)  
-- Actual vs Predicted price plots  
-- Error comparison bar charts  
-- Trend prediction visualizations  
-
----
+### Prediction Accuracy
+-The predicted stock prices closely followed the actual market prices
+-The model performed well during stable and moderately volatile periods
+-Minor deviations were observed during sudden market fluctuations, which is expected in   real-world stock data
 
 ## 6. Conclusion  
 

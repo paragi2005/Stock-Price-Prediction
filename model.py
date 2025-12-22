@@ -14,7 +14,7 @@ CHART_PATH = os.path.join(os.getcwd(), "static", "charts")
 os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
 os.makedirs(CHART_PATH, exist_ok=True)
 
-TIME_STEPS = 30  # Number of past days used for prediction
+TIME_STEPS = 252   # Approx 1 year of trading days
 
 # -------------------------------------------------
 # Load and preprocess data
